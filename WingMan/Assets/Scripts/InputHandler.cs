@@ -6,7 +6,8 @@ public class InputHandler : MonoBehaviour
 {
     static Vector2 touchDelta;
     static Touch myTouch;
-
+    Vector3 tempMousePos;
+    Vector3 mousePos;
 
     public static Touch GetTouch()
     {
@@ -26,6 +27,13 @@ public class InputHandler : MonoBehaviour
         else
         {
             touchDelta = Vector2.zero;
+        }
+        if (Input.GetMouseButton(0))
+        {
+
+        
+            touchDelta =new Vector2(Input.GetAxis("Mouse X"),Input.GetAxis("Mouse Y"));
+    
         }
     }
 }

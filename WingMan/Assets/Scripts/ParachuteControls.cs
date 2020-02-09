@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class ParachuteControls : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    Rigidbody myRb;
+    public float parachuteDrag;
+    public float canopyHeight;
+    public float controlForce;
+    public float rotationSpeed;
+    private void Start()
     {
-        
+        myRb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
-        
+        Vector3 forcesToAdd;
+        forcesToAdd = new Vector3(InputHandler.GetTouchDelta().x, 0, InputHandler.GetTouchDelta().y) * controlForce;
+        myRb.AddForce(forcesToAdd,ForceMode.VelocityChange);
+        myRb.AddForceAtPosition(Vector3.up * parachuteDrag, transform.TransformPoint(Vector3.up * canopyHeight));
     }
 }
