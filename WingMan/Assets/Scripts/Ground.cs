@@ -23,10 +23,10 @@ public class Ground : MonoBehaviour
     }
     IEnumerator WinRoutine(Collider other)
     {
-        GameManager.Instance.CurrentState = GameStates.Waiting;
+        GameManager.Instance.CurrentGameState = GameStates.Waiting;
         int scoreToAdd = CalculateScore(other);
         yield return new WaitForSeconds(2);
-        GameManager.Instance.CurrentState = GameStates.Win;
+        GameManager.Instance.CurrentGameState = GameStates.Win;
         AddToPlayerScore(scoreToAdd);
     }
     private int CalculateScore(Collider other)

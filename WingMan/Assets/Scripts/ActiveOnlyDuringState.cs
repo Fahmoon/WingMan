@@ -6,7 +6,7 @@ public class ActiveOnlyDuringState : MonoBehaviour
     public GameStates myActiveState;
     private void Awake()
     {
-        GameManager.Instance.CheckMyStates.AddListener(EnableOrDisableMyself);
+        GameManager.Instance.CheckMyGameStates.AddListener(EnableOrDisableMyself);
     }
      void EnableOrDisableMyself(GameStates currentGameState)
     {

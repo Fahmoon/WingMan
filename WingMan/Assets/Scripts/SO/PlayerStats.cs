@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerStats : ScriptableObject
 {
     [SerializeField] int currentCoinsCount;
+    public PlayerStates currentPlayerState;
     public int currentScore;
     public delegate void CoinsTaken(int count);
     public static event CoinsTaken CheckMyCount;
@@ -17,6 +18,6 @@ public class PlayerStats : ScriptableObject
             CheckMyCount.Invoke(currentCoinsCount);
         }
     }
-    
-  
+
+
 }

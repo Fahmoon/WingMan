@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &628566972217481518
 RectTransform:
   m_ObjectHideFlags: 0
@@ -79,9 +79,9 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -110,6 +110,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 628566972217481518}
     m_Modifications:
+    - target: {fileID: 9176806317530662306, guid: ba1756b5eabd8491db46822627dbac5a,
+        type: 3}
+      propertyPath: m_Name
+      value: Win
+      objectReference: {fileID: 0}
     - target: {fileID: 329661946645756730, guid: ba1756b5eabd8491db46822627dbac5a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -215,11 +220,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 9176806317530662306, guid: ba1756b5eabd8491db46822627dbac5a,
-        type: 3}
-      propertyPath: m_Name
-      value: Win
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba1756b5eabd8491db46822627dbac5a, type: 3}
 --- !u!224 &2422978967967053753 stripped
@@ -235,6 +235,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 628566972217481518}
     m_Modifications:
+    - target: {fileID: 3563464435435815318, guid: 8b991a80114104687b7680880a70b8ed,
+        type: 3}
+      propertyPath: m_Name
+      value: Gamplay
+      objectReference: {fileID: 0}
     - target: {fileID: 3508864737469725409, guid: 8b991a80114104687b7680880a70b8ed,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -339,11 +344,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3563464435435815318, guid: 8b991a80114104687b7680880a70b8ed,
-        type: 3}
-      propertyPath: m_Name
-      value: Gamplay
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b991a80114104687b7680880a70b8ed, type: 3}
@@ -485,6 +485,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 628566972217481518}
     m_Modifications:
+    - target: {fileID: 2495409192067089869, guid: b4e8e4bfb85194155a9b0bf1353a9fb1,
+        type: 3}
+      propertyPath: m_Name
+      value: Transition
+      objectReference: {fileID: 0}
+    - target: {fileID: 2495409192067089869, guid: b4e8e4bfb85194155a9b0bf1353a9fb1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6978444035597966244, guid: b4e8e4bfb85194155a9b0bf1353a9fb1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -590,16 +600,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 2495409192067089869, guid: b4e8e4bfb85194155a9b0bf1353a9fb1,
-        type: 3}
-      propertyPath: m_Name
-      value: Transition
-      objectReference: {fileID: 0}
-    - target: {fileID: 2495409192067089869, guid: b4e8e4bfb85194155a9b0bf1353a9fb1,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4e8e4bfb85194155a9b0bf1353a9fb1, type: 3}
 --- !u!224 &1593218755092678106 stripped
@@ -615,6 +615,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 628566972217481518}
     m_Modifications:
+    - target: {fileID: 76764043216655031, guid: 7aa152b9e967c4955a36754718ed8ee1,
+        type: 3}
+      propertyPath: m_Name
+      value: Lose
+      objectReference: {fileID: 0}
     - target: {fileID: 3565207319083929625, guid: 7aa152b9e967c4955a36754718ed8ee1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -719,11 +724,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 76764043216655031, guid: 7aa152b9e967c4955a36754718ed8ee1,
-        type: 3}
-      propertyPath: m_Name
-      value: Lose
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7aa152b9e967c4955a36754718ed8ee1, type: 3}
