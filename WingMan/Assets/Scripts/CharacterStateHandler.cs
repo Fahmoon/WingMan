@@ -57,6 +57,7 @@ public class CharacterStateHandler : MonoBehaviour
         yield return new WaitForSeconds(myAnimator.GetCurrentAnimatorStateInfo(0).length);
         parachuteAnimator.enabled = true;
         yield return new WaitForSeconds(parachuteAnimator.GetCurrentAnimatorStateInfo(0).length);
+        myRb.AddForceAtPosition(Vector3.up * 10, transform.up * 3, ForceMode.Impulse);
         myAnimator.transform.localEulerAngles = new Vector3(-90, 0, 0);
         parachuteAnimator.enabled = false;
         parachuteAnimator.gameObject.SetActive(false);
@@ -64,7 +65,8 @@ public class CharacterStateHandler : MonoBehaviour
     }
     void UseParachute()
     {
-        myRb.AddForceAtPosition(Vector3.up * 10, transform.up * 3, ForceMode.Impulse);
+        myRb.isKinematic = false;
+        myRb.useGravity = true;
         for (int i = 0; i < parachuteObjects.Length; i++)
         {
             parachuteObjects[i].SetActive(true);
