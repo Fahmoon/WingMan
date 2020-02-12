@@ -14,6 +14,22 @@ public class CheckPlayerState : UnityEvent<PlayerStates>
 
 }
 
+public struct ClipPoints
+{
+    public Vector3 upperLeft, upperRight, downLeft, downRight;
+
+    public override string ToString()
+    {
+        string _returnStr = string.Concat("------Plane Points------" + System.Environment.NewLine +
+            "Upper Right: " + upperRight + System.Environment.NewLine +
+            "Upper Left: " + upperLeft + System.Environment.NewLine +
+            "Down Left: " + downLeft + System.Environment.NewLine +
+            "Down Right: " + downRight);
+
+        return _returnStr;
+    }
+}
+
 public class GameManager : MonoBehaviour
 {
     #region Public Variables
@@ -113,6 +129,40 @@ public class GameManager : MonoBehaviour
             CurrentGameState = GameStates.Playing;
 
         }
+    }
+    #endregion
+
+    #region Static Methods
+    public static ClipPoints CalculatePlayGround(float distance, Camera cam)
+    {
+        ClipPoints _points = new ClipPoints();
+
+        Transform camTrans = cam.transform;
+        Vector3 camPos = camTrans.position;
+        Vector3 camProj = camPos + camTrans.forward * distance;
+        float halfFOV_Rad = cam.fieldOfView * 0.5f * Mathf.Deg2Rad;
+        float aspect = cam.aspect;
+
+        float height = Mathf.Tan(halfFOV_Rad) * distance;
+        float width = height * aspect;
+
+        _points.upperLeft = camProj;
+        _points.upperLeft -= camTrans.right * width;
+        _points.upperLeft += camTrans.up * height;
+
+        _points.upperRight = camProj;
+        _points.upperRight += camTrans.right * width;
+        _points.upperRight += camTrans.up * height;
+
+        _points.downLeft = camProj;
+        _points.downLeft -= camTrans.right * width;
+        _points.downLeft -= camTrans.up * height;
+
+        _points.downRight = camProj;
+        _points.downRight += camTrans.right * width;
+        _points.downRight -= camTrans.up * height;
+
+        return _points;
     }
     #endregion
     //    void Awake()
