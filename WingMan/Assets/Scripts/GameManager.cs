@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 
 [System.Serializable]
-public class CheckState : UnityEvent<GameStates>
+public class CheckGameState : UnityEvent<GameStates>
+{
+
+}
+[System.Serializable]
+public class CheckPlayerState : UnityEvent<PlayerStates>
 {
 
 }
@@ -29,22 +33,30 @@ public struct ClipPoints
 public class GameManager : MonoBehaviour
 {
     #region Public Variables
-    public CheckState CheckMyStates;
+    public CheckGameState CheckMyGameStates;
+    public CheckPlayerState CheckMyPlayerStates;
     #endregion
-    GameStates currentState;
-    public static int actualLevel;
-    public static int shownLevel;
+    GameStates currentGameState;
+    public static int currentLevel;
     public PlayerStats playerStats;
     public int coinCount;
     private static GameManager instance;
-    static bool firstTime;
-    public GameStates CurrentState
+    public GameStates CurrentGameState
     {
-        get => currentState;
+        get => currentGameState;
         set
         {
-            currentState = value;
-            CheckMyStates.Invoke(currentState);
+            currentGameState = value;
+            CheckMyGameStates.Invoke(currentGameState);
+        }
+    }
+    public PlayerStates CurrentPlayerState
+    {
+        get => playerStats.currentPlayerState;
+        set
+        {
+            playerStats.currentPlayerState = value;
+            CheckMyPlayerStates.Invoke(value);
         }
     }
 
@@ -62,40 +74,30 @@ public class GameManager : MonoBehaviour
     }
     private void OnDestroy()
     {
-        CheckMyStates.RemoveAllListeners();
+        CheckMyGameStates.RemoveAllListeners();
     }
     #region Public Methods
     public void StartGame()
     {
-        CurrentState = GameStates.Playing;
+        CurrentGameState = GameStates.Playing;
     }
     public void RestartGame()
     {
-        SceneManager.LoadScene(actualLevel);
+
     }
     public void WinGame()
     {
         // CurrentState = GameStates.Playing;
 
-        if (actualLevel < SceneManager.sceneCountInBuildSettings - 1)
-        {
-
-            actualLevel++;
-        }
-        else
-        {
-            actualLevel = 0;
-        }
-        shownLevel++;
-        PlayerPrefs.SetInt("ShownLevel", shownLevel);
-        PlayerPrefs.SetInt("CurrentLevel", actualLevel);
-       // LogAchieveLevelEvent(shownLevel.ToString());
-        SceneManager.LoadScene(actualLevel);
+        currentLevel++;
+        ObstacleGenerator.Instance.GenerateNewLevel();
+        PlayerPrefs.SetInt("CurrentLevel", currentLevel);
+        // LogAchieveLevelEvent(shownLevel.ToString());
 
     }
     public void GameOver()
     {
-        CurrentState = GameStates.Lose;
+        CurrentGameState = GameStates.Lose;
     }
 
     #endregion
@@ -108,30 +110,25 @@ public class GameManager : MonoBehaviour
         if (!PlayerPrefs.HasKey("CurrentLevel"))
         {
             PlayerPrefs.SetInt("CurrentLevel", 0);
-            actualLevel = PlayerPrefs.GetInt("CurrentLevel");
-
-            CurrentState = GameStates.MainMenu;
-
+            currentLevel = PlayerPrefs.GetInt("CurrentLevel");
+            CurrentGameState = GameStates.MainMenu;
+            CurrentPlayerState = PlayerStates.Idle;
+            ObstacleGenerator.Instance.GenerateNewLevel();
         }
-        else if (actualLevel != PlayerPrefs.GetInt("CurrentLevel"))
+        else if (currentLevel != PlayerPrefs.GetInt("CurrentLevel"))
         {
-            actualLevel = PlayerPrefs.GetInt("CurrentLevel");
-            firstTime = true;
-            SceneManager.LoadScene(actualLevel);
-
-        }
-        else if (firstTime)
-        {
-            CurrentState = GameStates.MainMenu;
-            firstTime = false;
-
+            currentLevel = PlayerPrefs.GetInt("CurrentLevel");
+            ObstacleGenerator.Instance.GenerateNewLevel();
+            CurrentPlayerState = PlayerStates.Idle;
+            CurrentGameState = GameStates.MainMenu;
+            //TODO
+            //Can Load a saved level here instead of generating a new one if we don't want the player to see a new level each time he enters the game
         }
         else
         {
-            CurrentState = GameStates.Playing;
+            CurrentGameState = GameStates.Playing;
 
         }
-        shownLevel = PlayerPrefs.GetInt("ShownLevel");
     }
     #endregion
 

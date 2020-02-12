@@ -16,8 +16,8 @@ public class WinLoseScript : MonoBehaviour
     public Image soundOff;
     public void Start()
     {
-        currentLevel.text = (GameManager.shownLevel + 1).ToString();
-        NextLevel.text =  (GameManager.shownLevel + 2).ToString();
+        currentLevel.text = (GameManager.currentLevel + 1).ToString();
+        NextLevel.text =  (GameManager.currentLevel + 2).ToString();
         isVibrate = PlayerPrefs.GetInt("isvibration", 0);
         isSound = PlayerPrefs.GetInt("isSound", 0);
         VibrationSetData();
@@ -27,7 +27,7 @@ public class WinLoseScript : MonoBehaviour
    
     public void ReplayButton()
     {
-        switch (GameManager.Instance.CurrentState)
+        switch (GameManager.Instance.CurrentGameState)
         {
           
             case GameStates.Win:
