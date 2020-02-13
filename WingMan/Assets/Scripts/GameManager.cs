@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
         // CurrentState = GameStates.Playing;
 
         currentLevel++;
-        ObstacleGenerator.Instance.GenerateNewLevel();
+//        ObstacleGenerator.Instance.GenerateNewLevel();
         PlayerPrefs.SetInt("CurrentLevel", currentLevel);
         // LogAchieveLevelEvent(shownLevel.ToString());
 
@@ -113,12 +113,12 @@ public class GameManager : MonoBehaviour
             currentLevel = PlayerPrefs.GetInt("CurrentLevel");
             CurrentGameState = GameStates.MainMenu;
             CurrentPlayerState = PlayerStates.Idle;
-            ObstacleGenerator.Instance.GenerateNewLevel();
+            //ObstacleGenerator.Instance.GenerateNewLevel(_clipPoints);
         }
         else if (currentLevel != PlayerPrefs.GetInt("CurrentLevel"))
         {
             currentLevel = PlayerPrefs.GetInt("CurrentLevel");
-            ObstacleGenerator.Instance.GenerateNewLevel();
+            //ObstacleGenerator.Instance.GenerateNewLevel(_clipPoints);
             CurrentPlayerState = PlayerStates.Idle;
             CurrentGameState = GameStates.MainMenu;
             //TODO
@@ -161,6 +161,11 @@ public class GameManager : MonoBehaviour
         _points.downRight = camProj;
         _points.downRight += camTrans.right * width;
         _points.downRight -= camTrans.up * height;
+
+        _points.upperLeft= cam.ViewportToWorldPoint(new Vector3(0, 1, distance)); 
+        _points.upperRight = cam.ViewportToWorldPoint(new Vector3(1, 1, distance));
+        _points.downLeft = cam.ViewportToWorldPoint(new Vector3(1,0,distance));
+        _points.downRight = cam.ViewportToWorldPoint(new Vector3(0,0,distance));
 
         return _points;
     }

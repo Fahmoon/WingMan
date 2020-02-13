@@ -29,13 +29,14 @@ public class InputHandler : MonoBehaviour
             touchDelta = Vector2.zero;
         }
 #if UNITY_EDITOR
-        //if (Input.GetMouseButton(0) && !Application.isMobilePlatform)
-        //{
+        if (Input.GetMouseButton(0) && !Application.isMobilePlatform)
+        {
 
 
-        //    touchDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+            touchDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 
-        //}
+        }
 #endif
+
     }
 }

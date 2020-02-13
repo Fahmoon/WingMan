@@ -7,12 +7,15 @@ public class CharacterStateHandler : MonoBehaviour
 {
     [SerializeField] GameObject[] parachuteObjects;
     [SerializeField] Animator parachuteAnimator;
+    [SerializeField] float pushBack;
+    CapsuleCollider myCollider;
     Rigidbody myRb;
     Animator myAnimator;
+
     private void Start()
     {
         myRb = GetComponent<Rigidbody>();
-
+        myCollider = GetComponent<CapsuleCollider>();
         myAnimator = GetComponentInChildren<Animator>();
     }
     private void OnTriggerEnter(Collider other)
@@ -21,7 +24,16 @@ public class CharacterStateHandler : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        StartCoroutine(DeathRoutine());
+        if (collision.gameObject.CompareTag("Side"))
+        {
+            Vector3 forceToAdd = myRb.velocity.normalized * -pushBack;
+            forceToAdd.y = 0;
+            myRb.AddForce(forceToAdd, ForceMode.VelocityChange);
+        }
+        else
+        {
+            StartCoroutine(DeathRoutine());
+        }
     }
 
     IEnumerator DeathRoutine()
@@ -54,11 +66,12 @@ public class CharacterStateHandler : MonoBehaviour
     IEnumerator ParachuteOpen()
     {
         myAnimator.SetTrigger("Parachuting");
-        yield return new WaitForSeconds(myAnimator.GetCurrentAnimatorStateInfo(0).length);
+        yield return new WaitForSeconds(1.208f);
         parachuteAnimator.enabled = true;
-        yield return new WaitForSeconds(parachuteAnimator.GetCurrentAnimatorStateInfo(0).length);
+        yield return new WaitForSeconds(1.208f);
+        myCollider.direction = 1;
         myRb.AddForceAtPosition(Vector3.up * 10, transform.up * 3, ForceMode.Impulse);
-        myAnimator.transform.localEulerAngles = new Vector3(-90, 0, 0);
+        //myAnimator.transform.localEulerAngles = new Vector3(-90, 0, 0);
         parachuteAnimator.enabled = false;
         parachuteAnimator.gameObject.SetActive(false);
         UseParachute();
