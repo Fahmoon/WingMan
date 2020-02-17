@@ -34,7 +34,7 @@ public class FreefallControls : MonoBehaviour
         float playerHeight = Mathf.Abs(transform.position.y - _mainCamera.transform.position.y);
 
         _clipPoints = GameManager.CalculatePlayGround(playerHeight, _mainCamera);
-
+        Debug.Log(_clipPoints);
         _rigidbody.velocity = Vector3.down * _downSpeed;
 
     }
