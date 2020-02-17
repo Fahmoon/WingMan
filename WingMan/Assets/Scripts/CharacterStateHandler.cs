@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class CharacterStateHandler : MonoBehaviour
@@ -8,36 +9,61 @@ public class CharacterStateHandler : MonoBehaviour
     [SerializeField] GameObject[] parachuteObjects;
     [SerializeField] Animator parachuteAnimator;
     [SerializeField] float pushBack;
-    CapsuleCollider myCollider;
     Rigidbody myRb;
     Animator myAnimator;
-
+    [SerializeField] AudioSource deathScream;
+    bool dead;
+    CharacterManipulatorScript _cms;
+    float timestamp; Stopwatch stopWatch = new Stopwatch();
     private void Start()
     {
         myRb = GetComponent<Rigidbody>();
-        myCollider = GetComponent<CapsuleCollider>();
         myAnimator = GetComponentInChildren<Animator>();
+        _cms = GetComponent<CharacterManipulatorScript>();
+        stopWatch.Start();
     }
     private void OnTriggerEnter(Collider other)
     {
-        GameManager.Instance.CurrentPlayerState = PlayerStates.Parachuting;
+        if (GameManager.Instance.CurrentPlayerState != PlayerStates.Parachuting)
+        {
+            GameManager.Instance.CurrentPlayerState = PlayerStates.Parachuting;
+        }
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Side"))
+        if (!dead)
         {
-            Vector3 forceToAdd = myRb.velocity.normalized * -pushBack;
-            forceToAdd.y = 0;
-            myRb.AddForce(forceToAdd, ForceMode.VelocityChange);
-        }
-        else
-        {
-            StartCoroutine(DeathRoutine());
+            if (collision.gameObject.CompareTag("Ground"))
+            {
+                myAnimator.SetTrigger("OnGround");
+                myRb.constraints = RigidbodyConstraints.FreezeAll;
+                print(stopWatch.Elapsed);
+
+            }
+            else
+            {
+                if (collision.gameObject.CompareTag("Side"))
+                {
+                    StartCoroutine(DeathRoutine(collision.gameObject.transform.position, collision.GetContact(0).point));
+                    // Debug.Log("side");
+                }
+                else
+                {
+                    Vector3 temp = Camera.main.transform.position;
+                    StartCoroutine(DeathRoutine(new Vector3(temp.x, -temp.y, temp.z), collision.GetContact(0).point)); //Debug.Log("top");
+                }
+
+            }
         }
     }
 
-    IEnumerator DeathRoutine()
+    IEnumerator DeathRoutine(Vector3 collisionObjectPos, Vector3 collisionPoint)
     {
+        dead = true;
+        myRb.isKinematic = true;
+        _cms.ToggleDeath();
+        deathScream.Play();
+        _cms.AddForce(collisionObjectPos, collisionPoint);
         GameManager.Instance.CurrentGameState = GameStates.Waiting;
         GameManager.Instance.CurrentPlayerState = PlayerStates.Dead;
         yield return new WaitForSeconds(2);
@@ -53,6 +79,7 @@ public class CharacterStateHandler : MonoBehaviour
             case PlayerStates.FreeFalling:
                 break;
             case PlayerStates.Parachuting:
+                print(stopWatch.Elapsed);
                 StartCoroutine(ParachuteOpen());
                 break;
             case PlayerStates.Celebrating:
@@ -69,7 +96,6 @@ public class CharacterStateHandler : MonoBehaviour
         yield return new WaitForSeconds(1.208f);
         parachuteAnimator.enabled = true;
         yield return new WaitForSeconds(1.208f);
-        myCollider.direction = 1;
         myRb.AddForceAtPosition(Vector3.up * 10, transform.up * 3, ForceMode.Impulse);
         //myAnimator.transform.localEulerAngles = new Vector3(-90, 0, 0);
         parachuteAnimator.enabled = false;
@@ -80,6 +106,7 @@ public class CharacterStateHandler : MonoBehaviour
     {
         myRb.isKinematic = false;
         myRb.useGravity = true;
+        myRb.constraints = RigidbodyConstraints.None;
         for (int i = 0; i < parachuteObjects.Length; i++)
         {
             parachuteObjects[i].SetActive(true);

@@ -11,11 +11,12 @@ public class ObstacleGenerator : MonoBehaviour
         Instance = this;
     }
  
-    public void GenerateNewLevel(ClipPoints _clipPoints)
+    public void GenerateNewLevel()
     {
-        for (int i = 0; i < 60; i++)
+        for (int i = 0; i < (GameStatics.instance.playerHeightY-GameStatics.instance.parachuteTriggerY-GameStatics.instance.startOffset)/ (GameStatics.instance.prefabsStep); i++)
         {
-            Instantiate(obstaclePrefabs[0], new Vector3(Random.Range(_clipPoints.upperLeft.x, _clipPoints.upperRight.x), Random.Range(0, 850), Random.Range(_clipPoints.upperLeft.z, _clipPoints.downLeft.z)), Quaternion.identity, transform);
+           
+            Instantiate(obstaclePrefabs[Random.Range(0,obstaclePrefabs.Length)], new Vector3(0, i*GameStatics.instance.prefabsStep+GameStatics.instance.parachuteTriggerY, 0), Quaternion.identity, transform);
         }
 
     }

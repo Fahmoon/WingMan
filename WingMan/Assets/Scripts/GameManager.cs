@@ -162,10 +162,10 @@ public class GameManager : MonoBehaviour
         _points.downRight += camTrans.right * width;
         _points.downRight -= camTrans.up * height;
 
-        _points.upperLeft= cam.ViewportToWorldPoint(new Vector3(0, 1, distance)); 
-        _points.upperRight = cam.ViewportToWorldPoint(new Vector3(1, 1, distance));
-        _points.downLeft = cam.ViewportToWorldPoint(new Vector3(1,0,distance));
-        _points.downRight = cam.ViewportToWorldPoint(new Vector3(0,0,distance));
+        //_points.upperLeft= cam.ViewportToWorldPoint(new Vector3(0, 1, distance)); 
+        //_points.upperRight = cam.ViewportToWorldPoint(new Vector3(1, 1, distance));
+        //_points.downLeft = cam.ViewportToWorldPoint(new Vector3(1,0,distance));
+        //_points.downRight = cam.ViewportToWorldPoint(new Vector3(0,0,distance));
 
         return _points;
     }
