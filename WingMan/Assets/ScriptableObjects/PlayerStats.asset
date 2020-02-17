@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: PlayerStats
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
   currentCoinsCount: 0
-  currentPlayerState: 2
-  currentScore: 3000
+  currentPlayerState: 4
+  currentScore: 28400

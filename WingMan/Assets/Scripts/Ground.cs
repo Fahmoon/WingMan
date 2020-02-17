@@ -14,7 +14,6 @@ public class Ground : MonoBehaviour
         myCollider = GetComponent<Collider>();
         myCenter = myCollider.bounds.center;
         radius = Vector3.Distance(Vector3.right * myCollider.bounds.extents.x + myCenter, myCenter);
-
     }
 
     private void OnTriggerEnter(Collider other)

@@ -14,10 +14,10 @@ public class TempCharFall : MonoBehaviour
 
     private void FixedUpdate()
     {
-        myRb.MovePosition(transform.position + Vector3.down);
-        if (transform.position.y<1)
+        if (GameManager.Instance.CurrentPlayerState!=PlayerStates.Parachuting)
         {
-            Debug.Log(Time.time - stamp);
+        myRb.MovePosition(transform.position + Vector3.down*0.5f);
         }
+       
     }
 }
