@@ -5,11 +5,11 @@ public class CharacterManipulatorScript : MonoBehaviour
     #region Private Fields
     [Header("SET IN INSPECTOR")]
     [SerializeField]
-    private GameObject      _normalModel;
+    private GameObject _normalModel;
     [SerializeField]
-    private GameObject      _ragdollModel;
+    private GameObject _ragdollModel;
     [SerializeField]
-    private float           _forceAfterDeathMagnifier;
+    private float _forceAfterDeathMagnifier;
     [SerializeField]
     private Rigidbody hips;
     #endregion
@@ -17,7 +17,7 @@ public class CharacterManipulatorScript : MonoBehaviour
     #region MonoBehavior Callbacks
     private void Awake()
     {
-        if(_normalModel == null || _ragdollModel == null)
+        if (_normalModel == null || _ragdollModel == null)
         {
             Debug.LogError("ASSGIN THE MODELS ASS HOLE");
             return;
@@ -29,29 +29,35 @@ public class CharacterManipulatorScript : MonoBehaviour
         int _counter = _ragdollsRigidBody.Length;
 
         PhysicMaterial _material = new PhysicMaterial();
-        _material.dynamicFriction   = 0.4f;
-        _material.staticFriction    = 0.4f;
-        _material.bounciness        = 0.5f;
+        _material.dynamicFriction = 0.4f;
+        _material.staticFriction = 0.4f;
+        _material.bounciness = 0.5f;
 
         for (int i = 1; i < _counter; i++)
             _ragdollsRigidBody[i].GetComponent<Collider>().material = _material;
-     
+
     }
 
     #endregion
 
     #region Private Methods
+    public void ToggleAlive()
+    {
+        _ragdollModel.SetActive(false);
+        CopyTransformData(_normalModel.transform, _ragdollModel.transform);
+        _normalModel.SetActive(true);
+    }
     public void ToggleDeath()
     {
-            CopyTransformData(_normalModel.transform, _ragdollModel.transform);
+        CopyTransformData(_normalModel.transform, _ragdollModel.transform);
 
-            _ragdollModel.SetActive(true);
-            _normalModel.SetActive(false);
+        _ragdollModel.SetActive(true);
+        _normalModel.SetActive(false);
 
     }
     private void CopyTransformData(Transform _sourceTransform, Transform _destinationTransform)
     {
-        if(_sourceTransform.childCount != _destinationTransform.childCount)
+        if (_sourceTransform.childCount != _destinationTransform.childCount)
         {
             Debug.LogError("Invalid transform copy, the transform childs doesn't match");
             return;
@@ -72,7 +78,7 @@ public class CharacterManipulatorScript : MonoBehaviour
     {
         Vector3 resultantForce = (hips.transform.position - _collidedWith).normalized;
 
-        hips.AddForceAtPosition(resultantForce * _forceAfterDeathMagnifier,_collisionPoint, ForceMode.Impulse);
+        hips.AddForceAtPosition(resultantForce * _forceAfterDeathMagnifier, _collisionPoint, ForceMode.Impulse);
     }
     #endregion
 }

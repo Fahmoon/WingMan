@@ -14,13 +14,11 @@ public class CharacterStateHandler : MonoBehaviour
     [SerializeField] AudioSource deathScream;
     bool dead;
     CharacterManipulatorScript _cms;
-    float timestamp; Stopwatch stopWatch = new Stopwatch();
-    private void Start()
+    private void Awake()
     {
         myRb = GetComponent<Rigidbody>();
         myAnimator = GetComponentInChildren<Animator>();
         _cms = GetComponent<CharacterManipulatorScript>();
-        stopWatch.Start();
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -37,7 +35,6 @@ public class CharacterStateHandler : MonoBehaviour
             {
                 myAnimator.SetTrigger("OnGround");
                 myRb.constraints = RigidbodyConstraints.FreezeAll;
-                print(stopWatch.Elapsed);
 
             }
             else
@@ -45,18 +42,26 @@ public class CharacterStateHandler : MonoBehaviour
                 if (collision.gameObject.CompareTag("Side"))
                 {
                     StartCoroutine(DeathRoutine(collision.gameObject.transform.position, collision.GetContact(0).point));
-                    // Debug.Log("side");
                 }
                 else
                 {
                     Vector3 temp = Camera.main.transform.position;
-                    StartCoroutine(DeathRoutine(new Vector3(temp.x, -temp.y, temp.z), collision.GetContact(0).point)); //Debug.Log("top");
+                    StartCoroutine(DeathRoutine(new Vector3(temp.x, -temp.y, temp.z), collision.GetContact(0).point));
                 }
 
             }
         }
     }
 
+    public void BackToLifeRoutine()
+    {
+        dead = false;
+        myRb.isKinematic = false;
+        _cms.ToggleAlive();
+        myRb.velocity = Vector3.zero;
+        Camera.main.transform.position = CharacterManager.instance.myCameraOriginalPosition;
+
+    }
     IEnumerator DeathRoutine(Vector3 collisionObjectPos, Vector3 collisionPoint)
     {
         dead = true;
@@ -69,17 +74,29 @@ public class CharacterStateHandler : MonoBehaviour
         yield return new WaitForSeconds(2);
         GameManager.Instance.CurrentGameState = GameStates.Lose;
     }
-
+    public void ListenToGameState(GameStates currentState)
+    {
+        switch (currentState)
+        {
+            case GameStates.MainMenu:
+                GameManager.Instance.CurrentPlayerState = PlayerStates.Idle;
+                break;
+            case GameStates.Playing:
+                GameManager.Instance.CurrentPlayerState = PlayerStates.FreeFalling;
+                break;
+        }
+    }
     public void HandlePlayerState(PlayerStates currentState)
     {
         switch (currentState)
         {
             case PlayerStates.Idle:
+                myRb.isKinematic = true;
                 break;
             case PlayerStates.FreeFalling:
+                myRb.isKinematic = false;
                 break;
             case PlayerStates.Parachuting:
-                print(stopWatch.Elapsed);
                 StartCoroutine(ParachuteOpen());
                 break;
             case PlayerStates.Celebrating:
