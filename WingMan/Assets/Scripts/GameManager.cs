@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     public PlayerStats playerStats;
     public int coinCount;
     private static GameManager instance;
+    bool appJustOpened;
     public GameStates CurrentGameState
     {
         get => currentGameState;
@@ -83,15 +84,29 @@ public class GameManager : MonoBehaviour
     }
     public void RestartGame()
     {
+        ResetPlayer();
+
+        CurrentGameState = GameStates.MainMenu;
 
     }
+
+    private void ResetPlayer()
+    {
+        playerStats.currentScore = 0;
+        CharacterManager.instance.stateHandler.BackToLifeRoutine();
+        CharacterManager.instance.gameObject.transform.position = CharacterManager.instance.originalPosition;
+        CharacterManager.instance.gameObject.transform.rotation = CharacterManager.instance.originalRotation;
+    }
+
     public void WinGame()
     {
-        // CurrentState = GameStates.Playing;
 
         currentLevel++;
-//        ObstacleGenerator.Instance.GenerateNewLevel();
         PlayerPrefs.SetInt("CurrentLevel", currentLevel);
+        ResetPlayer();
+        ObstacleGenerator.Instance.DestroyCurrentObstacles();
+        ObstacleGenerator.Instance.GenerateNewLevel();
+        CurrentGameState = GameStates.Playing;
         // LogAchieveLevelEvent(shownLevel.ToString());
 
     }
@@ -104,22 +119,24 @@ public class GameManager : MonoBehaviour
 
 
     #region Unity Callbacks
-
+    private void Awake()
+    {
+        appJustOpened = true;
+    }
     private void Start()
     {
+
+        ObstacleGenerator.Instance.GenerateNewLevel();
         if (!PlayerPrefs.HasKey("CurrentLevel"))
         {
             PlayerPrefs.SetInt("CurrentLevel", 0);
             currentLevel = PlayerPrefs.GetInt("CurrentLevel");
             CurrentGameState = GameStates.MainMenu;
-            CurrentPlayerState = PlayerStates.Idle;
-            //ObstacleGenerator.Instance.GenerateNewLevel(_clipPoints);
         }
-        else if (currentLevel != PlayerPrefs.GetInt("CurrentLevel"))
+        else if (currentLevel != PlayerPrefs.GetInt("CurrentLevel") || appJustOpened)
         {
+            appJustOpened = false;
             currentLevel = PlayerPrefs.GetInt("CurrentLevel");
-            //ObstacleGenerator.Instance.GenerateNewLevel(_clipPoints);
-            CurrentPlayerState = PlayerStates.Idle;
             CurrentGameState = GameStates.MainMenu;
             //TODO
             //Can Load a saved level here instead of generating a new one if we don't want the player to see a new level each time he enters the game

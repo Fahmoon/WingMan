@@ -16,11 +16,9 @@ public class GameStatics : MonoBehaviour
     private void Awake()
     {
         instance = this;
-    }
-    private void Start()
-    {
         groundY = ground.transform.position.y;
         parachuteTriggerY = parachuteTrigger.GetComponent<Collider>().bounds.center.y + parachuteTrigger.GetComponent<Collider>().bounds.extents.y;
         playerHeightY = playerHeight.transform.position.y;
     }
+ 
 }
